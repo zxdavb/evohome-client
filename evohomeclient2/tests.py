@@ -3,6 +3,8 @@ import requests_mock
 
 from . import EvohomeClient
 
+URL_ROOT = "https://tccna.honeywell.com/WebAPI/emea/api/v1/"
+
 INSTALLATION_DATA = """[{
     "locationInfo": {
         "locationId": "locationId"
@@ -22,6 +24,7 @@ INSTALLATION_DATA = """[{
         }
     ]
 }]"""
+
 INSTALLATION_DATA_MULTIPLE = """[{
     "locationInfo": {
         "locationId": "locationId"
@@ -75,6 +78,7 @@ LOCATION_DATA = """{
         }
     ]
 }"""
+
 LOCATION_DATA_MULTIPLE = """{
     "locationInfo": {
         "locationId": "locationId"
@@ -140,17 +144,17 @@ def test_user_account(mock):
         text=AUTH_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/userAccount",
-        status_code=200,
-        text=USER_RESPONSE,
+        URL_ROOT + "userAccount", status_code=200, text=USER_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/installationInfo?userId=userId&includeTemperatureControlSystems=True",
+        URL_ROOT + "location/installationInfo"
+        "?userId=userId&includeTemperatureControlSystems=True",
         status_code=200,
         text=INSTALLATION_DATA,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/locationId/status?includeTemperatureControlSystems=True",
+        URL_ROOT + "location/locationId/status"
+        "?includeTemperatureControlSystems=True",
         status_code=200,
         text=LOCATION_DATA,
     )
@@ -172,17 +176,17 @@ def test_temperatures(mock):
         text=AUTH_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/userAccount",
-        status_code=200,
-        text=USER_RESPONSE,
+        URL_ROOT + "userAccount", status_code=200, text=USER_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/installationInfo?userId=userId&includeTemperatureControlSystems=True",
+        URL_ROOT + "location/installationInfo"
+        "?userId=userId&includeTemperatureControlSystems=True",
         status_code=200,
         text=INSTALLATION_DATA,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/locationId/status?includeTemperatureControlSystems=True",
+        URL_ROOT + "location/locationId/status"
+        "?includeTemperatureControlSystems=True",
         status_code=200,
         text=LOCATION_DATA,
     )
@@ -202,24 +206,22 @@ def test_gateway(mock):
         text=AUTH_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/userAccount",
-        status_code=200,
-        text=USER_RESPONSE,
+        URL_ROOT + "userAccount", status_code=200, text=USER_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/installationInfo?userId=userId&includeTemperatureControlSystems=True",
+        URL_ROOT + "location/installationInfo"
+        "?userId=userId&includeTemperatureControlSystems=True",
         status_code=200,
         text=INSTALLATION_DATA,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/locationId/status?includeTemperatureControlSystems=True",
+        URL_ROOT + "location/locationId/status"
+        "?includeTemperatureControlSystems=True",
         status_code=200,
         text=LOCATION_DATA,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/gateway",
-        status_code=200,
-        text=GATEWAY_RESPONSE,
+        URL_ROOT + "gateway", status_code=200, text=GATEWAY_RESPONSE,
     )
 
     # try:
@@ -236,24 +238,22 @@ def test_single_settings(mock):
         text=AUTH_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/userAccount",
-        status_code=200,
-        text=USER_RESPONSE,
+        URL_ROOT + "userAccount", status_code=200, text=USER_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/installationInfo?userId=userId&includeTemperatureControlSystems=True",
+        URL_ROOT + "location/installationInfo"
+        "?userId=userId&includeTemperatureControlSystems=True",
         status_code=200,
         text=INSTALLATION_DATA,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/locationId/status?includeTemperatureControlSystems=True",
+        URL_ROOT + "location/locationId/status"
+        "?includeTemperatureControlSystems=True",
         status_code=200,
         text=LOCATION_DATA,
     )
     mock.put(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/temperatureControlSystem/sysId/mode",
-        status_code=200,
-        text="",
+        URL_ROOT + "temperatureControlSystem/sysId/mode", status_code=200, text="",
     )
     client = EvohomeClient("username", "password", debug=True)
 
@@ -275,24 +275,22 @@ def test_multi_zone_failure(mock):
         text=AUTH_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/userAccount",
-        status_code=200,
-        text=USER_RESPONSE,
+        URL_ROOT + "userAccount", status_code=200, text=USER_RESPONSE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/installationInfo?userId=userId&includeTemperatureControlSystems=True",
+        URL_ROOT + "location/installationInfo"
+        "?userId=userId&includeTemperatureControlSystems=True",
         status_code=200,
         text=INSTALLATION_DATA_MULTIPLE,
     )
     mock.get(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/location/locationId/status?includeTemperatureControlSystems=True",
+        URL_ROOT + "location/locationId/status"
+        "?includeTemperatureControlSystems=True",
         status_code=200,
         text=LOCATION_DATA_MULTIPLE,
     )
     mock.put(
-        "https://tccna.honeywell.com/WebAPI/emea/api/v1/temperatureControlSystem/sysId/mode",
-        status_code=200,
-        text="",
+        URL_ROOT + "temperatureControlSystem/sysId/mode", status_code=200, text="",
     )
     client = EvohomeClient("username", "password", debug=True)
 

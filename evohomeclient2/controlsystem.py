@@ -7,6 +7,8 @@ import requests
 from .hotwater import HotWater
 from .zone import Zone
 
+URL_ROOT = "https://tccna.honeywell.com/WebAPI/emea/api/v1/"
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -53,8 +55,7 @@ class ControlSystem(object):
             }
 
         response = requests.put(
-            "https://tccna.honeywell.com/WebAPI/emea/api/v1"
-            "/temperatureControlSystem/%s/mode" % self.systemId,
+            URL_ROOT + "temperatureControlSystem/%s/mode" % self.systemId,
             data=json.dumps(data),
             headers=headers,
         )

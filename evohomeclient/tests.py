@@ -5,15 +5,21 @@ import requests_mock
 
 from . import EvohomeClient
 
-UNAUTH_RESPONSE = """[{
+URL_ROOT = "http://localhost:5050/WebAPI/api/"
+
+UNAUTH_RESPONSE = """
+[{
     "code": "Unauthorized",
     "message": "Unauthorized"
-}]"""
+}]
+"""
 
 TASK_ACCEPTED_LIST = """[{"id": "123"}]"""
+
 TASK_ACCEPTED = """{"id": "123"}"""
 
-VALID_SESSION_RESPONSE = """{
+VALID_SESSION_RESPONSE = """
+{
   "sessionId": "EE32E3A8-1C09-4A5C-9572-24A088197A38",
   "userInfo": {
     "userID": 123456,
@@ -35,9 +41,11 @@ VALID_SESSION_RESPONSE = """{
     "securityQuestion3": "NotUsed",
     "latestEulaAccepted": false
   }
-}"""
+}
+"""
 
-VALID_ZONE_RESPONSE = """[
+VALID_ZONE_RESPONSE = """
+[
     {
         "locationID": 23456,
         "name": "Home",
@@ -188,8 +196,11 @@ VALID_ZONE_RESPONSE = """[
         }
         ]
     }
-    ]"""
-VALID_ZONE_RESPONSE_NO_DHW = """[
+]
+"""
+
+VALID_ZONE_RESPONSE_NO_DHW = """
+[
     {
         "locationID": 23456,
         "name": "Home",
@@ -273,21 +284,24 @@ VALID_ZONE_RESPONSE_NO_DHW = """[
         }
         ]
     }
-    ]"""
+]
+"""
 
 
 @requests_mock.Mocker()
 def test_429_returned_raises_exception(mock):
     """test that exception is raised for a 429 error"""
     mock.post(
-        "http://localhost:5050/WebAPI/api/Session",
+        URL_ROOT + "Session",
         status_code=429,
-        text="""[
-  {
-    "code": "TooManyRequests",
-    "message": "Request count limitation exceeded, please try again later."
-  }
-]""",
+        text="""
+        [
+            {
+                "code": "TooManyRequests",
+                "message": "Request count limitation exceeded, please try again later."
+            }
+        ]
+        """,
     )
 
     try:
@@ -302,10 +316,9 @@ def test_429_returned_raises_exception(mock):
 @requests_mock.Mocker()
 def test_valid_login(mock):
     """test valid path"""
-    mock.post("http://localhost:5050/WebAPI/api/Session", text=VALID_SESSION_RESPONSE)
+    mock.post(URL_ROOT + "Session", text=VALID_SESSION_RESPONSE)
     mock.get(
-        "http://localhost:5050/WebAPI/api/locations?userId=123456&allData=True",
-        text=VALID_ZONE_RESPONSE,
+        URL_ROOT + "locations?userId=123456&allData=True", text=VALID_ZONE_RESPONSE,
     )
 
     client = EvohomeClient("username", "password", hostname="http://localhost:5050")
@@ -339,9 +352,9 @@ def test_valid_login(mock):
 @requests_mock.Mocker()
 def test_expired_sessionid(mock):
     """test expired sessionid"""
-    mock.post("http://localhost:5050/WebAPI/api/Session", text=VALID_SESSION_RESPONSE)
+    mock.post(URL_ROOT + "Session", text=VALID_SESSION_RESPONSE)
     mock.get(
-        "http://localhost:5050/WebAPI/api/locations?userId=123456&allData=True",
+        URL_ROOT + "locations?userId=123456&allData=True",
         [
             {"text": UNAUTH_RESPONSE, "status_code": 401},
             {"text": VALID_ZONE_RESPONSE, "status_code": 200},
@@ -385,8 +398,7 @@ def test_expired_sessionid(mock):
 def test_get_zone_modes(mock):
     """test get zone modes"""
     mock.get(
-        "http://localhost:5050/WebAPI/api/locations?userId=123456&allData=True",
-        text=VALID_ZONE_RESPONSE,
+        URL_ROOT + "locations?userId=123456&allData=True", text=VALID_ZONE_RESPONSE,
     )
     client = EvohomeClient(
         "username",
@@ -405,15 +417,13 @@ def test_get_zone_modes(mock):
 def test_set_status(mock):
     """test that statuses can be set correctly"""
     mock.get(
-        "http://localhost:5050/WebAPI/api/locations?userId=123456&allData=True",
-        text=VALID_ZONE_RESPONSE,
+        URL_ROOT + "locations?userId=123456&allData=True", text=VALID_ZONE_RESPONSE,
     )
     mock.put(
-        "http://localhost:5050/WebAPI/api/evoTouchSystems?locationId=23456",
-        text=TASK_ACCEPTED,
+        URL_ROOT + "evoTouchSystems?locationId=23456", text=TASK_ACCEPTED,
     )
     mock.get(
-        "http://localhost:5050/WebAPI/api/commTasks?commTaskId=123",
+        URL_ROOT + "commTasks?commTaskId=123",
         [
             {"status_code": 200, "text": """{"state":"pending"}"""},
             {"status_code": 200, "text": """{"state":"Succeeded"}"""},
@@ -437,19 +447,18 @@ def test_set_status(mock):
 def test_zone_temp(mock):
     """test that zone temps can be set correctly"""
     mock.get(
-        "http://localhost:5050/WebAPI/api/locations?userId=123456&allData=True",
-        text=VALID_ZONE_RESPONSE,
+        URL_ROOT + "locations?userId=123456&allData=True", text=VALID_ZONE_RESPONSE,
     )
     mock.put(
-        "http://localhost:5050/WebAPI/api/devices/121212/thermostat/changeableValues/heatSetpoint",
+        URL_ROOT + "devices/121212/thermostat/changeableValues/heatSetpoint",
         text=TASK_ACCEPTED,
     )
     mock.put(
-        "http://localhost:5050/WebAPI/api/devices/131313/thermostat/changeableValues",
+        URL_ROOT + "devices/131313/thermostat/changeableValues",
         text=TASK_ACCEPTED_LIST,
     )
     mock.get(
-        "http://localhost:5050/WebAPI/api/commTasks?commTaskId=123",
+        URL_ROOT + "commTasks?commTaskId=123",
         [
             {"status_code": 200, "text": """{"state":"pending"}"""},
             {"status_code": 200, "text": """{"state":"Succeeded"}"""},
@@ -466,7 +475,7 @@ def test_zone_temp(mock):
     client.cancel_temp_override("RoomName")
 
     mock.get(
-        "http://localhost:5050/WebAPI/api/commTasks?commTaskId=123",
+        URL_ROOT + "commTasks?commTaskId=123",
         [
             {"status_code": 200, "text": """{"state":"pending"}"""},
             {"status_code": 200, "text": """{"state":"Succeeded"}"""},
@@ -481,19 +490,19 @@ def test_zone_temp(mock):
 def test_zone_temp_no_dhw(mock):
     """test that zone temps can be set correctly"""
     mock.get(
-        "http://localhost:5050/WebAPI/api/locations?userId=123456&allData=True",
+        URL_ROOT + "locations?userId=123456&allData=True",
         text=VALID_ZONE_RESPONSE_NO_DHW,
     )
     mock.put(
-        "http://localhost:5050/WebAPI/api/devices/121212/thermostat/changeableValues/heatSetpoint",
+        URL_ROOT + "devices/121212/thermostat/changeableValues/heatSetpoint",
         text=TASK_ACCEPTED_LIST,
     )
     mock.put(
-        "http://localhost:5050/WebAPI/api/devices/131313/thermostat/changeableValues",
+        URL_ROOT + "devices/131313/thermostat/changeableValues",
         text=TASK_ACCEPTED_LIST,
     )
     mock.get(
-        "http://localhost:5050/WebAPI/api/commTasks?commTaskId=123",
+        URL_ROOT + "commTasks?commTaskId=123",
         [
             {"status_code": 200, "text": """{"state":"pending"}"""},
             {"status_code": 200, "text": """{"state":"Succeeded"}"""},

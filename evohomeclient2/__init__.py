@@ -22,18 +22,19 @@ logging.basicConfig()
 _LOGGER = logging.getLogger(__name__)
 
 HEADER_ACCEPT = (
-    "application/json, application/xml, text/json, text/x-json, "
-    "text/javascript, text/xml"
+    "application/json, application/xml, text/json, text/x-json, text/javascript, "
+    "text/xml"
 )
 HEADER_AUTHORIZATION_BASIC = (
-    "Basic "
-    "NGEyMzEwODktZDJiNi00MWJkLWE1ZWItMTZhMGE0MjJiOTk5OjFhMTVjZGI4LTQyZGUtNDA3Y"
-    "i1hZGQwLTA1OWY5MmM1MzBjYg=="
+    "Basic NGEyMzEwODktZDJiNi00MWJkLWE1ZWItMTZhMGE0MjJiOTk5OjFhMTVjZGI4LTQyZGUtNDA3Yi1h"
+    "ZGQwLTA1OWY5MmM1MzBjYg=="
 )
 HEADER_BASIC_AUTH = {
     "Accept": HEADER_ACCEPT,
     "Authorization": HEADER_AUTHORIZATION_BASIC,
 }
+
+URL_ROOT = "https://tccna.honeywell.com/WebAPI/emea/api/v1/"
 
 
 class AuthenticationError(Exception):
@@ -115,8 +116,8 @@ class EvohomeClient(object):
     def _basic_login(self):
         """Obtain a new access token from the vendor.
 
-        First, try using the refresh_token, if one is available, otherwise
-        authenticate using the user credentials.
+        First, try using the refresh_token, if one is available, otherwise authenticate
+        using the user credentials.
         """
         _LOGGER.debug("No/Expired/Invalid access_token, re-authenticating.")
         self.access_token = self.access_token_expires = None
@@ -220,7 +221,7 @@ class EvohomeClient(object):
         """Return the user account information."""
         self.account_info = None
 
-        url = "https://tccna.honeywell.com/WebAPI/emea/api/v1/userAccount"
+        url = URL_ROOT + "userAccount"
 
         response = requests.get(url, headers=self._headers())
         response.raise_for_status()
@@ -233,8 +234,8 @@ class EvohomeClient(object):
         self.locations = []
 
         url = (
-            "https://tccna.honeywell.com/WebAPI/emea/api/v1/location"
-            "/installationInfo?userId=%s&includeTemperatureControlSystems=True"
+            URL_ROOT + "location/installationInfo"
+            "?userId=%s&includeTemperatureControlSystems=True"
             % self.account_info["userId"]
         )
 
@@ -255,9 +256,8 @@ class EvohomeClient(object):
     def full_installation(self, location=None):
         """Return the full details of the installation."""
         url = (
-            "https://tccna.honeywell.com/WebAPI/emea/api/v1/location"
-            "/%s/installationInfo?includeTemperatureControlSystems=True"
-            % self._get_location(location)
+            URL_ROOT + "location/%s/installationInfo"
+            "?includeTemperatureControlSystems=True" % self._get_location(location)
         )
 
         response = requests.get(url, headers=self._headers())
@@ -267,7 +267,7 @@ class EvohomeClient(object):
 
     def gateway(self):
         """Return the details of the gateway."""
-        url = "https://tccna.honeywell.com/WebAPI/emea/api/v1/gateway"
+        url = URL_ROOT + "gateway"
 
         response = requests.get(url, headers=self._headers())
         response.raise_for_status()
