@@ -277,7 +277,7 @@ VALID_ZONE_RESPONSE_NO_DHW = """[
 
 
 @requests_mock.Mocker()
-def test_429_returned_raises_exception(mock):  # pylint: disable=invalid-name
+def test_429_returned_raises_exception(mock):
     """test that exception is raised for a 429 error"""
     mock.post(
         "http://localhost:5050/WebAPI/api/Session",
@@ -295,7 +295,6 @@ def test_429_returned_raises_exception(mock):  # pylint: disable=invalid-name
         list(client.temperatures())
         # Shouldn't get here
         assert False
-    # pylint: disable=bare-except
     except:
         assert True
 
@@ -510,5 +509,5 @@ def test_zone_temp_no_dhw(mock):
     try:
         client.set_dhw_on()
         assert False
-    except:  # pylint: disable=bare-except
+    except:
         pass

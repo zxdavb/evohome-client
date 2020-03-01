@@ -27,10 +27,8 @@ logging.basicConfig()
 _LOGGER = logging.getLogger(__name__)
 
 
-class EvohomeClient(object):  # pylint: disable=useless-object-inheritance
+class EvohomeClient(object):
     """Provide a client to access the Honeywell Evohome system."""
-
-    # pylint: disable=too-many-instance-attributes,too-many-arguments
 
     def __init__(
         self,
@@ -191,9 +189,7 @@ class EvohomeClient(object):  # pylint: disable=useless-object-inheritance
         response = func(url, data=data, headers=self.headers)
 
         # catch 401/unauthorized since we may retry
-        if (
-            response.status_code == requests.codes.unauthorized and retry
-        ):  # pylint: disable=no-member
+        if response.status_code == requests.codes.unauthorized and retry:
             # Attempt to refresh sessionId if it has expired
             if "code" in response.text:  # don't use response.json() here!
                 if response.json()[0]["code"] == "Unauthorized":
@@ -209,7 +205,7 @@ class EvohomeClient(object):  # pylint: disable=useless-object-inheritance
                     response = func(url, data=data, headers=self.headers)
 
         # display error message if the vendor provided one
-        if response.status_code != requests.codes.ok:  # pylint: disable=no-member
+        if response.status_code != requests.codes.ok:
             if "code" in response.text:  # don't use response.json()!
                 message = (
                     "HTTP Status = "

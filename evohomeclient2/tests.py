@@ -132,7 +132,7 @@ GATEWAY_RESPONSE = """
 
 
 @requests_mock.Mocker()
-def test_user_account(mock):  # pylint: disable=invalid-name
+def test_user_account(mock):
     """test that user account is successful"""
     mock.post(
         "https://tccna.honeywell.com/Auth/OAuth/Token",
@@ -164,7 +164,7 @@ def test_user_account(mock):  # pylint: disable=invalid-name
 
 
 @requests_mock.Mocker()
-def test_temperatures(mock):  # pylint: disable=invalid-name
+def test_temperatures(mock):
     """test that user account is successful"""
     mock.post(
         "https://tccna.honeywell.com/Auth/OAuth/Token",
@@ -194,7 +194,7 @@ def test_temperatures(mock):  # pylint: disable=invalid-name
 
 
 @requests_mock.Mocker()
-def test_gateway(mock):  # pylint: disable=invalid-name
+def test_gateway(mock):
     """test that user account is successful"""
     mock.post(
         "https://tccna.honeywell.com/Auth/OAuth/Token",
@@ -299,6 +299,5 @@ def test_multi_zone_failure(mock):
     try:
         client.set_status_away()
         assert False  # shouldn't get here
-    # pylint: disable=bare-except
     except:
         assert True

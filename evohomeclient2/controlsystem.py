@@ -10,9 +10,7 @@ from .zone import Zone
 _LOGGER = logging.getLogger(__name__)
 
 
-class ControlSystem(
-    object
-):  # pylint: disable=useless-object-inheritance, too-many-instance-attributes
+class ControlSystem(object):
     """Provides handling of a control system."""
 
     def __init__(self, client, location, gateway, data=None):
@@ -25,7 +23,7 @@ class ControlSystem(
         self.zones = {}
         self.zones_by_id = {}
         self.hotwater = None
-        self.systemId = None  # pylint: disable=invalid-name
+        self.systemId = None
 
         if data is not None:
             local_data = dict(data)
@@ -42,7 +40,6 @@ class ControlSystem(
                 self.hotwater = HotWater(client, data["dhw"])
 
     def _set_status(self, mode, until=None):
-        # pylint: disable=protected-access
         headers = dict(self.client._headers())
         headers["Content-Type"] = "application/json"
 
@@ -103,7 +100,6 @@ class ControlSystem(
         self.location.status()
 
         if self.hotwater:
-            # pylint: disable=no-member
             yield {
                 "thermostat": "DOMESTIC_HOT_WATER",
                 "id": self.hotwater.dhwId,

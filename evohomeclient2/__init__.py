@@ -45,9 +45,7 @@ class AuthenticationError(Exception):
         super(AuthenticationError, self).__init__(message)
 
 
-class EvohomeClient(
-    object
-):  # pylint: disable=too-many-instance-attributes,useless-object-inheritance
+class EvohomeClient(object):
     """Provide access to the v2 Evohome API."""
 
     def __init__(
@@ -58,7 +56,7 @@ class EvohomeClient(
         refresh_token=None,
         access_token=None,
         access_token_expires=None,
-    ):  # pylint: disable=too-many-arguments
+    ):
         """Construct the EvohomeClient object."""
         if debug is True:
             _LOGGER.setLevel(logging.DEBUG)
@@ -207,7 +205,6 @@ class EvohomeClient(
 
     def _get_single_heating_system(self):
         # This allows a shortcut for some systems
-        # pylint: disable=protected-access
         if len(self.locations) != 1:
             raise Exception("More (or less) than one location available")
 
