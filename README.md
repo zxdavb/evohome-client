@@ -1,7 +1,7 @@
 evohome-client
 ==============
 
-Build status: [![CircleCI](https://circleci.com/gh/zxdavb/evohome-client.svg?style=svg)](https://circleci.com/gh/watchforstock/evohome-client)
+Build status: [![CircleCI](https://circleci.com/gh/watchforstock/evohome-client.svg?style=svg)](https://circleci.com/gh/watchforstock/evohome-client)
 
 Python client to access the [Total Connect Comfort](https://international.mytotalconnectcomfort.com/Account/Login) RESTful API.
 
