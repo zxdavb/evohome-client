@@ -9,8 +9,8 @@ from .zone import ZoneBase
 class HotWater(ZoneBase):
     """Provides handling of the hot water zone."""
 
-    def __init__(self, client, data):
-        super(HotWater, self).__init__(client)
+    def __init__(self, client, data, timeout=30):
+        super(HotWater, self).__init__(client, timeout)
 
         self.dhwId = None                                                        # pylint: disable=invalid-name
 
@@ -28,7 +28,7 @@ class HotWater(ZoneBase):
             "/domesticHotWater/%s/state" % self.dhwId
         )
 
-        response = requests.put(url, data=json.dumps(data), headers=headers)
+        response = requests.put(url, data=json.dumps(data), headers=headers, timeout=self.timeout)
         response.raise_for_status()
 
     def set_dhw_on(self, until=None):
@@ -64,3 +64,15 @@ class HotWater(ZoneBase):
                 "UntilTime": None}
 
         self._set_dhw(data)
+
+
+    def get_dhw_state(self):
+        """Gets the DHW state."""
+        url = (
+            "https://tccna.honeywell.com/WebAPI/emea/api/v1/"
+            "domesticHotWater/%s/status?" % self.dhwId
+        )
+
+        response = requests.get( url, headers=self.client._headers(), timeout=self.timeout)
+        data = response.json()
+        return data
