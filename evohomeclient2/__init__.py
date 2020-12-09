@@ -170,7 +170,9 @@ class EvohomeClient(
         }
         payload.update(credentials)  # merge the credentials into the payload
 
-        response = requests.post(url, data=payload, headers=HEADER_BASIC_AUTH, timeout=self.timeout)
+        response = requests.post(
+            url, data=payload, headers=HEADER_BASIC_AUTH, timeout=self.timeout
+        )
 
         try:
             response.raise_for_status()
