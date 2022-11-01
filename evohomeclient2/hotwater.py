@@ -10,6 +10,7 @@ class HotWater(ZoneBase):
     """Provides handling of the hot water zone."""
 
     def __init__(self, client, data, timeout=30):
+        """Initialise the class."""
         super(HotWater, self).__init__(client, timeout)
 
         self.dhwId = None  # pylint: disable=invalid-name
@@ -34,7 +35,7 @@ class HotWater(ZoneBase):
         response.raise_for_status()
 
     def set_dhw_on(self, until=None):
-        """Sets the DHW on until a given time, or permanently."""
+        """Set the DHW on until a given time, or permanently."""
         if until is None:
             data = {"Mode": "PermanentOverride", "State": "On", "UntilTime": None}
         else:
@@ -47,7 +48,7 @@ class HotWater(ZoneBase):
         self._set_dhw(data)
 
     def set_dhw_off(self, until=None):
-        """Sets the DHW off until a given time, or permanently."""
+        """Set the DHW off until a given time, or permanently."""
         if until is None:
             data = {"Mode": "PermanentOverride", "State": "Off", "UntilTime": None}
         else:
@@ -60,13 +61,13 @@ class HotWater(ZoneBase):
         self._set_dhw(data)
 
     def set_dhw_auto(self):
-        """Sets the DHW to follow the schedule."""
+        """Set the DHW to follow the schedule."""
         data = {"Mode": "FollowSchedule", "State": "", "UntilTime": None}
 
         self._set_dhw(data)
 
     def get_dhw_state(self):
-        """Gets the DHW state."""
+        """Get the DHW state."""
         url = (
             "https://tccna.honeywell.com/WebAPI/emea/api/v1/"
             "domesticHotWater/%s/status?" % self.dhwId
