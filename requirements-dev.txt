@@ -6,4 +6,4 @@ ptvsd==4.3.2
 pycodestyle==2.5.0
 pyflakes==2.1.1
 pylint==2.4.4
-requests==2.23.0
+requests==2.28.1
