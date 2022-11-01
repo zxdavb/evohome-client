@@ -1,9 +1,6 @@
-black==19.10b0
-flake8==3.7.9
-isort==4.3.21
-pre-commit==2.1.1
-ptvsd==4.3.2
-pycodestyle==2.5.0
-pyflakes==2.1.1
-pylint==2.4.4
-requests==2.28.1
+black==22.10.0
+flake8==5.0.4  # flake8_docstrings, pycodestyle, pydocstyle, pyflakes
+isort==5.10.1
+nose2==0.12.0
+pre_commit==2.20.0
+requests_mock==1.10.0  # requests
