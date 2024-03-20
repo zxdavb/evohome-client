@@ -1,4 +1,4 @@
-black==22.10.0
+black==24.3.0
 flake8==5.0.4  # flake8_docstrings, pycodestyle, pydocstyle, pyflakes
 isort==5.10.1
 nose2==0.12.0
